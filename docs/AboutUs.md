@@ -27,14 +27,15 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
     * UI Design
     * Code Review
 
-### Jane Doe
+### Choy Min Han
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/choy050823.png" width="300">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[homepage](https://www.linkedin.com/in/choy-min-han/)]
+[[github](http://github.com/Choy050823)]
+[[portfolio](team/choyminhan.md)]
 
-* Role: Team Lead
+* Role: Software Developer
 * Responsibilities: UI
 
 ### Johnny Doe
@@ -44,7 +45,10 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 [[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
 
 * Role: Developer
-* Responsibilities: Data
+* Responsibilities:
+  * Backend Integration
+  * UI Design
+  * Code Review
 
 ### Jean Doe
 
