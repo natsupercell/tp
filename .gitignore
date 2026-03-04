@@ -8,9 +8,6 @@ src/main/resources/docs/
 /out/
 /*.iml
 
-# Vscode
-.vscode
-
 # Storage/log files
 /data/
 /config.json
