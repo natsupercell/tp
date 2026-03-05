@@ -5,19 +5,25 @@ title: About Us
 
 We are a team based in the [School of Computing, National University of Singapore](https://www.comp.nus.edu.sg).
 
-You can reach us at the email `seer[at]comp.nus.edu.sg`
-
 ## Project team
 
-### John Doe
+Our tutor is **Priyadarshi Charvi**. Our team consists of 5 members.
 
-<img src="images/johndoe.png" width="200px">
+### Lee Yi Heng
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+_A Year 2 Mathematics and Computer Science student at NUS with an interest in backend engineering and machine learning._
 
-* Role: Project Advisor
+<img src="images/henghengyh.png" width="300px">
+
+[[homepage](https://www.linkedin.com/in/lee-yi-heng-nus/)]
+[[github](https://github.com/henghengyh)]
+[[portfolio](team/yiheng.md)]
+
+* Role: Team Lead
+* Responsibilities: 
+    * Backend Integration
+    * UI Design
+    * Code Review
 
 ### Jane Doe
 
@@ -48,12 +54,11 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
 
-### James Doe
+### Nguyen An Thinh
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/natsupercell.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/natsupercell)]
 
 * Role: Developer
 * Responsibilities: UI
