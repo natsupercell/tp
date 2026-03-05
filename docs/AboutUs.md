@@ -27,7 +27,7 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 
 ### Choy Min Han
 
-<img src="images/choy050823.png" width="300">
+<img src="images/choy050823.png" width="300px">
 
 [[homepage](https://www.linkedin.com/in/choy-min-han/)]
 [[github](http://github.com/Choy050823)]
@@ -38,7 +38,7 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 
 ### Nguyen Viet Quang
 
-<img src="images/vietquang1006.png" width="200px">
+<img src="images/vietquang1006.png" width="300px">
 
 [[github](http://github.com/vietquang1006)]
 
@@ -56,7 +56,7 @@ _A Year 2 Mathematics and Computer Science student at NUS with an interest in ba
 
 ### Chai Yi Kang
 
-<img src="images/chaiyikang.png" width="200px">
+<img src="images/chaiyikang.png" width="300px">
 
 [[homepage](https://chaiyikang.vercel.app)]
 [[github](http://github.com/chaiyikang)]
