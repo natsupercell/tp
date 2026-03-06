@@ -2,9 +2,9 @@ title: "W13-3 TP: CampusConnect"
 theme: minima
 
 header_pages:
-    - UserGuide.md
-    - DeveloperGuide.md
-    - AboutUs.md
+  - UserGuide.md
+  - DeveloperGuide.md
+  - AboutUs.md
 
 markdown: kramdown
 
@@ -12,4 +12,4 @@ repository: "se-edu/addressbook-level3"
 github_icon: "images/github-icon.png"
 
 plugins:
-    - jemoji
+  - jemoji
