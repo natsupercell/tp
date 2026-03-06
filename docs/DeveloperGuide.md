@@ -319,25 +319,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. Portability
     1. Should work on any _mainstream OS_ (e.g. Windows, macOS and Linux) as long as it has Java `17` or above installed.
-2.  Capacity
+2. Capacity
     1. Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  CLI Productivity 
+3. CLI Productivity 
     1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4. Performance 
-    1. Should return search results within 1 second for up to 1000 stored contacts.
+    1. Should return search results within 1 second for about 1000 stored contacts.
 5. Usability 
     1. A new user should be able to learn basic commands (add, delete, find, list) within 10 minutes using the provided user guide.
 6. Data Persistence
     1. Should not lose stored contacts when the application is closed normally and persist the stored contacts between application sessions.
 7. Reliability
     1. Should operate without crashes during normal usage and when executing valid commands.
-8. Robustness
-    1. Should handle invalid or malformed user input gracefully by displaying appropriate error messages without terminating the application.
-9. Startup Time
+    2. Should handle invalid or malformed user input gracefully by displaying appropriate error messages without terminating the application.
+8. Startup Time
     1. Should launch and be ready to accept commands within 2 seconds (under typical scenarios).
-10. User Operation Feedback
+9. User Operation Feedback
     1. Should provide clear and consistent feedback messages to inform the user of successful or failed operations.
-11. Fault Tolerance
+10. Fault Tolerance
     1. Should ensure that existing contact data remains intact even if a command execution fails due to invalid input. 
 
 *{More to be added}*
