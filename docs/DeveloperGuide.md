@@ -262,13 +262,13 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* Secretary of NUSSU
+* manages contact details of leaders across multiple university committees
+* frequently coordinates meetings and events between student leadership bodies
+* has a busy schedule and needs quick access to contact information
+* prefers fast interaction using commands instead of navigating complex interfaces
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: helps the NUSSU secretary manage contact details of leaders from multiple university committees and quickly identify who has meetings or events during specific periods, reducing time spent searching scattered contacts and improving coordination across student leadership bodies.
 
 ### User Stories
 
