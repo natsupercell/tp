@@ -262,71 +262,216 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
+* Secretary of NUSSU
+* manages contact details of many leaders across multiple university committees
+* frequently coordinates meetings and events between student leadership bodies
+* has a busy schedule and needs quick access to contact information
 * can type fast
-* prefers typing to mouse interactions
+* prefers typing to navigating a complex GUI-driven app
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: helps the NUSSU secretary manage contact details of many leaders from multiple university committees and quickly identify who has meetings or events during specific periods, reducing time spent searching scattered contacts and improving coordination across student leadership bodies.
 
-
-### User stories
+### User Stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
+| Priority | As a … | I want to … | So that I can … |
+|---------|--------|-------------|-----------------|
+| `* * *` | user | add a contact | save their details |
+| `* * *` | user | delete a contact | remove outdated contacts from the database |
+| `* * *` | user | search for a contact by name | quickly find the details of someone based on their name |
+| `* * *` | returning user | view a complete list of all stored contacts | scroll through my network to see all available contacts |
+| `* *` | first-time user | view sample contacts of student leaders and their schedules | understand how the coordination features work without needing to manually input data first |
+| `* *` | user | edit a contact | update their details in the future |
+| `* *` | user who manages many communities | tag and search contacts by committee (e.g. Welfare, Rag) | quickly group leaders and identify which student body they belong to |
+| `* *` | busy student leader | add a "busy" indicator for contacts who have events during a specific week | record periods when certain people are unavailable |
+| `* *` | busy student leader | filter and view contacts who have events during a specific week | avoid scheduling coordination meetings during peak event periods |
+| `*` | user | duplicate a contact | quickly create another contact based on an existing one |
+| `*` | forgetful user | add a new contact with only some of the required fields | quickly record someone I just met before I forget their details |
+| `*` | user ready to adopt the app | mass-import contact details from a CSV or Excel file | onboard hundreds of committee leaders efficiently without manual entry |
 
 *{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+**UC01: Tag a Leader for an Event**
 
-**Use case: Delete a person**
+**Goal:** To associate an existing contact with a specific committee or event tag.
 
-**MSS**
+**MSS:**
+1. Marcus searches for a leader by name.
+2. CampusConnect displays a list of matching contacts.
+3. Marcus selects the desired contact from the list.
+4. CampusConnect displays the contact’s detailed profile.
+5. Marcus selects the option to **Add Tag**.
+6. CampusConnect prompts for the tag name.
+7. Marcus enters the event/committee name (e.g., "Sustainability Forum").
+8. CampusConnect saves the tag and updates the profile view.
+   Use case ends.
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+**Extensions:**
+* 2a. The search returns no matches.
+    * 2a1. Marcus chooses to create a new contact.
+    * 2a2. Use case resumes from step 5 of **UC02 (Add New Contact)**.
+* 7a. The tag already exists in the system.
+    * 7a1. CampusConnect provides a dropdown of existing matches.
+    * 7a2. Marcus selects the correct tag from the list.
+    * Use case resumes from step 8.
 
-    Use case ends.
+---
 
-**Extensions**
+**UC02: Create Contact via Duplication**
 
-* 2a. The list is empty.
+**Goal:** To quickly add a new committee member by copying details (like committee/schedules) from an existing member.
 
-  Use case ends.
+**MSS:**
+1. Marcus searches for an existing leader with similar details (e.g., "Adam").
+2. CampusConnect displays the existing profile.
+3. Marcus selects the **Duplicate Contact** option.
+4. CampusConnect opens a new "Add Contact" form pre-filled with the original's committee and "busy" indicators.
+5. Marcus edits the name and contact information to match the new person (e.g., "Charlene").
+6. Marcus saves the new contact.
+7. CampusConnect confirms the creation and displays the new profile.
+   Use case ends.
 
-* 3a. The given index is invalid.
+**Extensions:**
+* 5a. Marcus is missing some required information (e.g., the phone number).
+    * 5a1. Marcus saves the contact with only the name and tag.
+    * 5a2. CampusConnect saves the profile but marks it with a "Missing Info" flag for future follow-up.
+    * Use case ends.
 
-    * 3a1. AddressBook shows an error message.
+---
 
-      Use case resumes at step 2.
+**UC03: Bulk Archive Outdated Contacts**
 
-*{More to be added}*
+**Goal:** To remove high-volume committee data (e.g., from a past year's Rag & Flag) from the active view while keeping it for records.
+
+**MSS:**
+1. Marcus filters the contact list by a specific tag (e.g., "Rag 2025").
+2. CampusConnect displays all leaders associated with that tag.
+3. Marcus selects the **Select All** checkbox.
+4. Marcus selects the **Archive** action.
+5. CampusConnect requests confirmation to archive the selected batch of contacts.
+6. Marcus confirms the action.
+7. CampusConnect moves the contacts to the archive and clears the current view.
+   Use case ends.
+
+**Extensions:**
+* 6a. Marcus realizes some selected members are still active.
+    * 6a1. Marcus deselects the specific active members from the list.
+    * 6a2. Marcus proceeds to confirm the archival for the remaining selection.
+    * Use case resumes from step 7.
+
+---
+
+**UC04: Add Contact**
+
+**Goal:** To manually add a new student leader's details to the system.
+
+**MSS:**
+1. Marcus chooses to add a new contact.
+2. CampusConnect requests the leader's details (Name, Committee, Role, Contact Number, and "Busy" periods).
+3. Marcus enters the requested details.
+4. CampusConnect saves the contact and displays the new profile.
+   Use case ends.
+
+**Extensions:**
+* 3a. Marcus only has partial information (e.g., name and committee only).
+    * 3a1. Marcus enters the available information and chooses to save.
+    * 3a2. CampusConnect saves the contact and flags the profile as "Incomplete."
+    * Use case ends.
+* 3b. CampusConnect detects a duplicate contact (same name and committee).
+    * 3b1. CampusConnect warns Marcus about the potential duplicate.
+    * 3b2. Marcus chooses to either cancel the entry or proceed with a unique identifier.
+    * Use case resumes at step 4.
+
+---
+
+**UC05: Delete Contact**
+
+**Goal:** To remove a contact who has graduated or left their position.
+
+**MSS:**
+1. Marcus finds the contact he wishes to remove (see **UC06: Search Contact**).
+2. Marcus selects the **Delete** option for that contact.
+3. CampusConnect requests confirmation for the deletion.
+4. Marcus confirms the deletion.
+5. CampusConnect removes the contact from the database and confirms the action.
+   Use case ends.
+
+**Extensions:**
+* 4a. Marcus chooses to cancel the deletion.
+    * 4a1. CampusConnect returns to the contact's profile view without deleting.
+    * Use case ends.
+
+---
+
+**UC06: Search Contact**
+
+**Goal:** To find a specific leader or group of leaders using a name or keyword.
+
+**MSS:**
+1. Marcus enters a search query (e.g., a person’s name, a committee name, or a tag).
+2. CampusConnect filters the contacts based on the query.
+3. CampusConnect displays a list of matching contacts.
+4. Marcus selects a contact from the list to view full details.
+   Use case ends.
+
+**Extensions:**
+* 2a. No matching contacts are found.
+    * 2a1. CampusConnect displays a "No results found" message and suggests checking the spelling or the Archive.
+    * 2a2. Marcus enters a new search query.
+    * Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+1. Portability
+    1. Should work on any _mainstream OS_ (e.g. Windows, macOS and Linux) as long as it has Java `17` or above installed.
+    2. Should not depend on any remote server.
+2. Scalability
+    1. Should be able to hold up to **100 contacts** without a noticeable sluggishness in performance for typical usage.
+3. CLI Productivity 
+    1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. Performance 
+    1. Should return search results within **1 second** for about **1000 stored contacts**.
+5. Usability 
+    1. A new user should be able to learn basic commands (add, delete, find, list) within **10 minutes** using the provided user guide.
+6. Data Storage
+    1. Should not use a _Database Management System (DBMS)_ to store data.
+    2. Should not lose stored contacts when the application is closed normally and persist the stored contacts between application sessions.
+7. Reliability
+    1. Should operate without crashes during normal usage and when executing valid commands.
+    2. Should handle invalid or malformed user input gracefully by displaying appropriate error messages without terminating the application.
+8. Startup Time
+    1. Should launch and be ready to accept commands within **2 seconds** (under typical scenarios).
+9. User Operation Feedback
+    1. Should provide _clear and consistent_ feedback messages (using the same format) to inform the user of successful or failed operations.
+10. Fault Tolerance
+    1. Should ensure that existing contact data remains intact even if a command execution fails due to invalid input.
+11. Single-User Constraint
+    1. Should be designed for **single-user usage** and should not support concurrent access by multiple users.
+    2. Should not support multiple users accessing or modifying the same data file during normal operations.
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Contact**: A stored record representing a student leader or collaborator, including information such as name, phone number, email, and committee.
+
+* **Contact list**: The collection of all contacts stored in the application.
+
+* **Committee**: A student organisation group or sub-committee (e.g., Welfare, Rag, Orientation) that a contact may belong to.
+
+* **Busy indicator**: A marker showing that a contact is unavailable during a particular week due to events or commitments.
+
+* **Mass import**: A feature that allows many contacts to be added at once using a CSV or Excel file.
+
+* **First-time user**: A user who is opening the application for the first time and may rely on sample data to understand how the system works.
+
+* **Returning user**: A user who has previously stored contacts in the application and is returning to manage or review them.
+
+* **CLI command**: A text-based instruction entered by the user to perform an action in the application (e.g., `add`, `delete`, `find`, `list`).
+
+*{More to be added}*
 
 --------------------------------------------------------------------------------------------------------------------
 
