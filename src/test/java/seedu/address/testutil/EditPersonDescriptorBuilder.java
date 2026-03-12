@@ -33,19 +33,22 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder(Person person) {
         descriptor = new EditPersonDescriptor();
+        descriptor.setRole(person.getRole());
         descriptor.setName(person.getName());
         descriptor.setPhone(person.getPhone());
         descriptor.setEmail(person.getEmail());
         descriptor.setAddress(person.getAddress());
         descriptor.setTags(person.getTags());
     }
-	/**
-	 * Sets the {@code Role} of the {@code EditPersonDescriptor} that we are building.
-	 */
-	public EditPersonDescriptorBuilder withRole(String role) {
-		descriptor.setRole(new Role(role));
-		return this;
-	}
+
+    /**
+     * Sets the {@code Role} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withRole(String role) {
+        descriptor.setRole(new Role(role));
+        return this;
+    }
+
     /**
      * Sets the {@code Name} of the {@code EditPersonDescriptor} that we are building.
      */
