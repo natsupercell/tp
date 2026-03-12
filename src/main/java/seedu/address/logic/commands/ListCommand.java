@@ -37,12 +37,11 @@ public class ListCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        // TODO: Implement sorting - may require editing PersonListPanel to allow sort/comparator
         if (shouldSort) {
-            logger.info("TODO: Sorting the FilteredList (view only) of persons in the address book.");
+            model.updateSortedPersonList(Model.SORT_BY_NAME_ASCENDING);
             return new CommandResult(MESSAGE_SUCCESS_SORT);
         } else {
-            logger.info("TODO: No sorting to be done.");
+            model.updateSortedPersonList(null);
             return new CommandResult(MESSAGE_SUCCESS);
         }
     }

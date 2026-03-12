@@ -26,6 +26,8 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SortedList<Person> sortedFilteredPersons;
+    private final Comparator<Person> ascendingComparator;
+    private final Comparator<Person> descendingComparator;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -40,12 +42,14 @@ public class ModelManager implements Model {
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         sortedFilteredPersons = new SortedList<>(filteredPersons);
 
-        // Filter the person full name in alphabetical order
-        sortedFilteredPersons.setComparator(
-                Comparator.comparing((Person p) -> p.getName().fullName,
-                        String.CASE_INSENSITIVE_ORDER
-                ).thenComparing(p -> p.getName().fullName)
-        );
+        ascendingComparator = Comparator.comparing(
+                (Person p) -> p.getName().fullName,
+                String.CASE_INSENSITIVE_ORDER
+        ).thenComparing(p -> p.getName().fullName);
+
+        descendingComparator = ascendingComparator.reversed();
+
+        sortedFilteredPersons.setComparator(null);
     }
 
     public ModelManager() {
@@ -131,14 +135,13 @@ public class ModelManager implements Model {
      */
     @Override
     public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
-    }
-
-    @Override
-    public ObservableList<Person> getSortedFilteredPersonList() {
         return sortedFilteredPersons;
     }
 
+    @Override
+    public void updateSortedPersonList(Comparator<Person> comparator) {
+        sortedFilteredPersons.setComparator(comparator);
+    }
 
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
