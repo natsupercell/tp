@@ -30,7 +30,7 @@ public class ConfirmDeleteCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person personToDelete = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         ConfirmDeleteCommand confirmDeleteCommand = new ConfirmDeleteCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(ConfirmDeleteCommand.MESSAGE_ASK_CONFIRMATION,
@@ -43,7 +43,7 @@ public class ConfirmDeleteCommandTest {
 
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        Index outOfBoundIndex = Index.fromOneBased(model.getSortedFilteredPersonList().size() + 1);
         ConfirmDeleteCommand confirmDeleteCommand = new ConfirmDeleteCommand(outOfBoundIndex);
 
         assertCommandFailure(confirmDeleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -53,7 +53,7 @@ public class ConfirmDeleteCommandTest {
     public void execute_validIndexFilteredList_success() throws CommandException {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
-        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person personToDelete = model.getSortedFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         ConfirmDeleteCommand confirmDeleteCommand = new ConfirmDeleteCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(ConfirmDeleteCommand.MESSAGE_ASK_CONFIRMATION,

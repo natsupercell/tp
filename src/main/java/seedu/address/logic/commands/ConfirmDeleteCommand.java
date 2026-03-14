@@ -35,7 +35,7 @@ public class ConfirmDeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Person> lastShownList = model.getSortedFilteredPersonList();
 
         // we want to make sure the specified index is valid before asking for confirmation
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
