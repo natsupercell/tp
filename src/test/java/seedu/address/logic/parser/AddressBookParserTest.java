@@ -172,8 +172,8 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommandWithConfirmation_unknownCommand_throwsParseException() {
-        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND,
-                () -> parser.parseCommandWithConfirmation("unknownCommand"));
+        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () ->
+                parser.parseCommandWithConfirmation("unknownCommand"));
     }
 
     @Test

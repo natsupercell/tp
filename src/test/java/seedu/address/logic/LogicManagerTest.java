@@ -133,7 +133,7 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void execute_commandAwaitingConfirmation_invalidInput_throwsParseException() throws Exception {
+    public void execute_commandAwaitingConfirmation_invalidInputthrowsParseException() throws Exception {
         // Add a person
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_AMY + ROLE_DESC_AMY;
