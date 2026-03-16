@@ -113,39 +113,23 @@ public class PersonCard extends UiPart<Region> {
      */
     private void makeCopyable(Label label, String cssClass) {
         label.getStyleClass().add(cssClass);
-
         label.setOnMouseClicked(event -> {
-            boolean onCI = "true".equals(System.getenv("CI"));
-
-            // ----------------------------
             // Step ONE: Copy to clipboard
-            // ----------------------------
-            if (!onCI) {
-                Clipboard clipboard = Clipboard.getSystemClipboard();
-                ClipboardContent content = new ClipboardContent();
-                content.putString(label.getText());
-                clipboard.setContent(content);
-                System.out.println("Copied: " + label.getText());
-            }
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(label.getText());
+            clipboard.setContent(content);
+            System.out.println("Copied: " + label.getText());
 
-            // ----------------------------
             // Step TWO: Simulate feedback by changing background color
-            // ----------------------------
             String originalStyle = label.getStyle();
-            String copiedStyle = "-fx-background-color: #FFC0CB"; // Light pink
+            String copiedStyle = "-fx-background-color: #FFC0CB"; // Light pink color to indicate copy action
             label.setStyle(copiedStyle);
 
-            // ----------------------------
-            // Step THREE: Revert back after 200ms (skip pause on CI)
-            // ----------------------------
-            if (!onCI) {
-                PauseTransition pause = new PauseTransition(Duration.millis(200));
-                pause.setOnFinished(e -> label.setStyle(originalStyle));
-                pause.play();
-            } else {
-                // On CI, reset immediately to avoid hanging
-                label.setStyle(originalStyle);
-            }
+            // Step THREE: Revert back after 200ms
+            PauseTransition pause = new PauseTransition(Duration.millis(200));
+            pause.setOnFinished(e -> label.setStyle(originalStyle));
+            pause.play();
         });
     }
 }

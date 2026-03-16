@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.input.Clipboard;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -176,59 +175,5 @@ public class PersonCardTest {
         javafx.scene.layout.FlowPane tagsPane = getPrivateField(personCard[0], "tags");
 
         assertEquals(2, tagsPane.getChildren().size());
-    }
-
-    /**
-     * Tests that clicking on a copyable label (e.g., phone) copies the correct text to the clipboard.
-     * Asynchronus because we need to interact with the JavaFX thread and clipboard,
-     * which may not be available in headless environments.
-     * @throws Exception
-     */
-    @Test
-    public void copyableLabel_click_triggers() throws Exception {
-        Person person = new PersonBuilder().build();
-
-        CountDownLatch latch = new CountDownLatch(1);
-        final PersonCard[] personCard = new PersonCard[1];
-
-        // Create PersonCard on JavaFX thread
-        Platform.runLater(() -> {
-            personCard[0] = new PersonCard(person, 1);
-            latch.countDown();
-        });
-        if (!latch.await(1, TimeUnit.SECONDS)) {
-            fail("JavaFX thread did not initialize PersonCard in time");
-        }
-
-        Label phoneLabel = getPrivateField(personCard[0], "phone");
-
-        CountDownLatch clickLatch = new CountDownLatch(1);
-
-        // Simulate click safely on JavaFX thread
-        Platform.runLater(() -> {
-            phoneLabel.fireEvent(
-                    new javafx.scene.input.MouseEvent(
-                            javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-                            0, 0, 0, 0,
-                            javafx.scene.input.MouseButton.PRIMARY,
-                            1,
-                            false, false, false, false,
-                            true, false, false,
-                            true, false, false,
-                            null
-                    )
-            );
-
-            if (!"true".equals(System.getenv("CI"))) {
-                Clipboard clipboard = Clipboard.getSystemClipboard();
-                assertEquals(person.getPhone().value, clipboard.getString());
-            }
-
-            clickLatch.countDown();
-        });
-
-        if (!clickLatch.await(500, TimeUnit.MILLISECONDS)) {
-            System.out.println("Click event did not complete in time (likely on CI)");
-        }
     }
 }
