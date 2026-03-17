@@ -9,6 +9,12 @@
 - XXX
 
 ### Changes to MVP - Feature 3
+- **Enhanced Find Command:** Updated the `find` command to support explicit search types using `find name ...` and `find tag ...`.
+- **Multi-word Search Support:** Added support for semicolon-separated keyword groups, allowing inputs such as `find name alice pauline ; josh` and `find tag friends ; owes me ; secretary`.
+- **Flexible Matching:** Search is now case-insensitive and supports partial matching for both names and tags.
+- **Input Validation:** Added validation to reject invalid keyword groups containing non-alphanumeric characters.
+
+### Changes to MVP - Feature 4
 - **Delete Command Safeguard:** Added a mandatory `[y/n]` user confirmation prompt to the `delete INDEX` command to prevent the accidental deletion of contacts.
 
 #### Product UI
@@ -18,7 +24,7 @@ Using `delete 1` command will trigger a confirmation prompt:
 
 ### Changes to MVP - Feature 4
 - **Useful List - Sort:** Added the (optional) ability to display contacts in sorted order (ascending or descending by name).
-- **Useful List - UI:** 
+- **Useful List - UI:**
   - Improved the readability of the contact list by aligning key fields (name, phone, email, tags) consistently.
   - Added light visual styling such as bold text and color variations to highlight important contact information.
   - Added a click-to-copy function with user feedback.
