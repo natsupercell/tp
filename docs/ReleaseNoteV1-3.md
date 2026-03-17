@@ -24,7 +24,7 @@ Using `delete 1` command will trigger a confirmation prompt:
 
 ### Changes to MVP - Feature 4
 - **Useful List - Sort:** Added the (optional) ability to display contacts in sorted order (ascending or descending by name).
-- **Useful List - UI:** 
+- **Useful List - UI:**
   - Improved the readability of the contact list by aligning key fields (name, phone, email, tags) consistently.
   - Added light visual styling such as bold text and color variations to highlight important contact information.
   - Added a click-to-copy function with user feedback.
