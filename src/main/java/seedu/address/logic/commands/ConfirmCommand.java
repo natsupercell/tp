@@ -16,7 +16,7 @@ import seedu.address.model.Model;
  * command is executed separately by the {@code LogicManager}.
  */
 
-public abstract class ConfirmCommand extends Command {
+public interface ConfirmCommand {
 
     /**
      * Returns the confirmation message to be shown to the user.
@@ -25,20 +25,6 @@ public abstract class ConfirmCommand extends Command {
      * @return the confirmation message.
      * @throws CommandException if the confirmation request is invalid.
      */
-    protected abstract String getConfirmationMessage(Model model) throws CommandException;
-
-    /**
-     * Executes the confirmation command by validating the request and returning
-     * a confirmation prompt to the user.
-     *
-     * @param model {@code Model} which the command should operate on.
-     * @return a {@code CommandResult} indicating that the application is awaiting
-     *         user confirmation.
-     * @throws CommandException if the request is invalid.
-     */
-    @Override
-    public CommandResult execute(Model model) throws CommandException {
-        return new CommandResult(getConfirmationMessage(model), false, false, true);
-    }
+    public String getConfirmationMessage(Model model) throws CommandException;
 
 }

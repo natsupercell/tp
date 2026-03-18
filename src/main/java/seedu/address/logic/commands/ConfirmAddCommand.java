@@ -17,40 +17,16 @@ import seedu.address.model.person.Person;
  * Adds a person immediately if the person is not already in the address book.
  * Otherwise, requests confirmation before allowing the duplicate person to be added.
  */
-public class ConfirmAddCommand extends ConfirmCommand {
-
-    public static final String COMMAND_WORD = "add";
-
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
-            + "Parameters: "
-            + PREFIX_ROLE + "ROLE "
-            + PREFIX_NAME + "NAME "
-            + PREFIX_PHONE + "PHONE "
-            + PREFIX_EMAIL + "EMAIL "
-            + PREFIX_ADDRESS + "ADDRESS "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_ROLE + "President "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
-            + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
-            + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+public class ConfirmAddCommand extends AddCommand implements ConfirmCommand {
 
     public static final String MESSAGE_CONFIRM_DUPLICATE_PERSON =
             "This person already exists: %1$s\nAdd anyway? [y/n]";
-
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-
-    private final Person toAdd;
 
     /**
      * Creates a ConfirmAddCommand to add the specified {@code Person}
      */
     public ConfirmAddCommand(Person person) {
-        requireNonNull(person);
-        this.toAdd = person;
+        super(person);
     }
 
     /**
@@ -76,7 +52,7 @@ public class ConfirmAddCommand extends ConfirmCommand {
     }
 
     @Override
-    protected String getConfirmationMessage(Model model) {
+    public String getConfirmationMessage(Model model) {
         return String.format(MESSAGE_CONFIRM_DUPLICATE_PERSON, Messages.format(toAdd));
     }
 
@@ -85,17 +61,14 @@ public class ConfirmAddCommand extends ConfirmCommand {
         if (other == this) {
             return true;
         }
+
+        // instanceof handles nulls
         if (!(other instanceof ConfirmAddCommand)) {
             return false;
         }
+
         ConfirmAddCommand otherConfirmAddCommand = (ConfirmAddCommand) other;
         return toAdd.equals(otherConfirmAddCommand.toAdd);
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .add("toAdd", toAdd)
-                .toString();
-    }
 }
