@@ -104,7 +104,7 @@ public class LogicManagerTest {
 
         // Confirm (second step: execution)
         String confirmCommand = "y";
-        String expectedDeleteMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+        String expectedDeleteMessage = String.format(DeleteCommand.MESSAGE_SUCCESS,
                 Messages.format(expectedPerson));
         CommandResult confirmResult = logic.execute(confirmCommand);
         assertEquals(expectedDeleteMessage, confirmResult.getFeedbackToUser());
@@ -333,7 +333,7 @@ public class LogicManagerTest {
         CommandResult result = logic.execute("y");
 
         assertEquals(
-                String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(expectedPerson)),
+                String.format(DeleteCommand.MESSAGE_SUCCESS, Messages.format(expectedPerson)),
                 result.getFeedbackToUser());
         assertEquals(0, model.getAddressBook().getPersonList().size());
     }
