@@ -69,6 +69,14 @@ public class BusyPeriod {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
+    public String getStartDateString() {
+        return startDate.format(DATE_FORMATTER);
+    }
+
+    public String getEndDateString() {
+        return endDate.format(DATE_FORMATTER);
+    }
+
     @Override
     public String toString() {
         return startDate.format(DATE_FORMATTER) + " to " + endDate.format(DATE_FORMATTER);
