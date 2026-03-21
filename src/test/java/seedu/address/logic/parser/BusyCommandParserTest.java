@@ -42,7 +42,7 @@ public class BusyCommandParserTest {
     @Test
     public void parse_invalidValue_failure() {
         // invalid index
-        assertParseFailure(parser, "a -s 25/03/2026 -e 28/03/2026", 
+        assertParseFailure(parser, "a -s 25/03/2026 -e 28/03/2026",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, BusyCommand.MESSAGE_USAGE));
 
         // invalid start date

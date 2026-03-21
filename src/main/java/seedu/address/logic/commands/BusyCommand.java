@@ -21,7 +21,10 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
-public class BusyCommand extends Command{
+/**
+ * Command to mark a person as busy.
+ */
+public class BusyCommand extends Command {
     public static final String COMMAND_WORD = "busy";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Marks the person identified "
@@ -39,6 +42,10 @@ public class BusyCommand extends Command{
     private final Index index;
     private final Optional<BusyPeriod> busyPeriod;
 
+    /**
+     * @param index of the person in the filtered person list to edit
+     * @param busyPeriod to mark the person as busy
+     */
     public BusyCommand(Index index, Optional<BusyPeriod> busyPeriod) {
         this.index = index;
         this.busyPeriod = busyPeriod;
@@ -46,7 +53,7 @@ public class BusyCommand extends Command{
     }
 
     @Override
-    public CommandResult execute(seedu.address.model.Model model) throws seedu.address.logic.commands.exceptions.CommandException {
+    public CommandResult execute(seedu.address.model.Model model) throws CommandException {
         requireNonNull(model);
         List<Person> lastShownList = model.getSortedFilteredPersonList();
 

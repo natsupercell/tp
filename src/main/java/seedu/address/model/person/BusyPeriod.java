@@ -35,12 +35,12 @@ public class BusyPeriod {
         requireNonNull(endDate);
         checkArgument(isValidDateFormat(startDate), MESSAGE_CONSTRAINTS);
         checkArgument(isValidDateFormat(endDate), MESSAGE_CONSTRAINTS);
-        
+
         LocalDate start = LocalDate.parse(startDate, DATE_FORMATTER);
         LocalDate end = LocalDate.parse(endDate, DATE_FORMATTER);
-        
+
         checkArgument(isValidBusyPeriod(start, end), MESSAGE_DATE_LOGIC);
-        
+
         this.startDate = start;
         this.endDate = end;
     }

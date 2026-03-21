@@ -62,8 +62,7 @@ public class PersonCard extends UiPart<Region> {
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
         person.getBusyPeriod().ifPresentOrElse(
-                bp -> busyPeriod.setText("Busy: " + bp.toString()),
-                () -> {
+                bp -> busyPeriod.setText("Busy: " + bp.toString()), () -> {
                     busyPeriod.setText("");
                     busyPeriod.setManaged(false);
                     busyPeriod.setVisible(false);
