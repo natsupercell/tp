@@ -32,7 +32,7 @@ public class Person {
     private final Optional<BusyPeriod> busyPeriod;
 
     /**
-     * Every field must be present and not null, except BusyPeriod
+     * Every field must be present and not null, except BusyPeriod.
      */
     public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
         requireAllNonNull(role, name, phone, email, address, tags);
@@ -46,7 +46,7 @@ public class Person {
     }
 
     /**
-     * Every field must be present and not null, except BusyPeriod
+     * Every field must be present and not null.
      */
     public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags, Optional<BusyPeriod> busyPeriod) {
         requireAllNonNull(role, name, phone, email, address, tags, busyPeriod);
@@ -88,9 +88,9 @@ public class Person {
     }
 
     /**
-     * Returns an Optinal<BusyPeriod>
+     * Returns an Optinal<BusyPeriod>.
      */
-    public Optinal<BusyPeriod> getBusyPeriod() {
+    public Optional<BusyPeriod> getBusyPeriod() {
         return this.busyPeriod;
     }
 
@@ -135,7 +135,7 @@ public class Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(role, name, phone, email, address, tags, BusyPeriod);
+        return Objects.hash(role, name, phone, email, address, tags, busyPeriod);
     }
 
     @Override
