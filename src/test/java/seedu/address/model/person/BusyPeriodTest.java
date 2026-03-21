@@ -41,12 +41,23 @@ public class BusyPeriodTest {
         assertFalse(BusyPeriod.isValidDateFormat("25-03-2026")); // wrong separator
         assertFalse(BusyPeriod.isValidDateFormat("2026/03/25")); // wrong order
         assertFalse(BusyPeriod.isValidDateFormat("25/03/26")); // wrong year format
-        assertFalse(BusyPeriod.isValidDateFormat("32/03/2026")); // invalid day
+        assertFalse(BusyPeriod.isValidDateFormat("32/03/2026")); // invalid day (exceeds 31)
         assertFalse(BusyPeriod.isValidDateFormat("25/13/2026")); // invalid month
+
+        // dates that are invalid for specific months
+        assertFalse(BusyPeriod.isValidDateFormat("31/04/2026")); // April has 30 days
+        assertFalse(BusyPeriod.isValidDateFormat("29/02/2026")); // 2026 is not a leap year
+        assertTrue(BusyPeriod.isValidDateFormat("29/02/2024")); // 2024 is a leap year
 
         // valid formats
         assertTrue(BusyPeriod.isValidDateFormat("25/03/2026"));
         assertTrue(BusyPeriod.isValidDateFormat("01/01/2000"));
+    }
+
+    @Test
+    public void constructor_invalidDateForMonth_throwsIllegalArgumentException() {
+        // This test is expected to FAIL if the current implementation rounds the date instead of throwing error.
+        assertThrows(IllegalArgumentException.class, () -> new BusyPeriod("31/04/2026", "01/05/2026"));
     }
 
     @Test
