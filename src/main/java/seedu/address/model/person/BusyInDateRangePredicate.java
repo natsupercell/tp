@@ -10,8 +10,8 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests that a {@code Person} is busy in the given date range.
  */
 public class BusyInDateRangePredicate implements Predicate<Person> {
-    private final LocalDate startDate;
-    private final LocalDate endDate;
+    private final String startDate;
+    private final String endDate;
     private final BusyPeriod range;
 
     /**
@@ -20,13 +20,10 @@ public class BusyInDateRangePredicate implements Predicate<Person> {
      * @param startDate The start of the date range.
      * @param endDate The end of the date range.
      */
-    public BusyInDateRangePredicate(LocalDate startDate, LocalDate endDate) {
+    public BusyInDateRangePredicate(String startDate, String endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-        String startStr = startDate.format(formatter);
-        String endStr = endDate.format(formatter);
-        this.range = new BusyPeriod(startStr, endStr);
+        this.range = new BusyPeriod(startDate, endDate);
     }
 
     /**
