@@ -95,7 +95,8 @@ public class ConfirmEditCommandTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
         ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_SECOND_PERSON, descriptor);
 
-        String expectedMessage = String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(firstPerson))
+        String expectedMessage =
+                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(firstPerson))
                 + String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION, Messages.format(secondPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
@@ -113,7 +114,8 @@ public class ConfirmEditCommandTest {
         ConfirmEditCommand confirmEditCommand = new ConfirmEditCommand(INDEX_FIRST_PERSON,
                 new EditPersonDescriptorBuilder(duplicatePerson).build());
 
-        String expectedMessage = String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(duplicatePerson))
+        String expectedMessage =
+                String.format(ConfirmEditCommand.MESSAGE_DUPLICATE_PERSON_WARNING, Messages.format(duplicatePerson))
                 + String.format(ConfirmEditCommand.MESSAGE_ASK_CONFIRMATION, Messages.format(personInFilteredList));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());

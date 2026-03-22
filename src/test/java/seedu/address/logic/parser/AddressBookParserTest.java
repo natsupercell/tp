@@ -19,8 +19,8 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.BusyCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.ConfirmAddCommand;
-import seedu.address.logic.commands.ConfirmEditCommand;
 import seedu.address.logic.commands.ConfirmDeleteCommand;
+import seedu.address.logic.commands.ConfirmEditCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -177,8 +177,10 @@ public class AddressBookParserTest {
     public void parseCommandWithConfirmation_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
-        ConfirmEditCommand command = (ConfirmEditCommand) parser.parseCommandWithConfirmation(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getEditPersonDescriptorDetails(descriptor));
+        ConfirmEditCommand command = (ConfirmEditCommand) parser.parseCommandWithConfirmation(
+                EditCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PersonUtil.getEditPersonDescriptorDetails(descriptor));
         assertEquals(new ConfirmEditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
