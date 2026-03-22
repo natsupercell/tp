@@ -198,7 +198,7 @@ Examples:
 
 Filters and displays contacts who are busy during a specified date range.
 
-A contact is considered busy if there exists at least one day within the given period such that the contact has an event on that day.
+A contact is considered busy if there exists at least one day within the given period such that the contact is busy on that day.
 
 Otherwise, the contact is considered not busy if for all days in the specified period, the contact is not busy.
 
