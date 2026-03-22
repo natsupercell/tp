@@ -5,18 +5,23 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
 
 /**
- * Represents a Person in the address book.
+ * Represents a Person's role in the address book.
  * Guarantees: details are present and not null, field values are validated, immutable.
+ * Note: Each {@code Person} entry is expected to have a single role.
+ * If a person holds multiple responsibilities, it is recommended to
+ * create separate entries for each role.
  */
 public class Person {
 
     // Identity fields
+    private final Role role;
     private final Name name;
     private final Phone phone;
     private final Email email;
@@ -24,17 +29,39 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final Optional<BusyPeriod> busyPeriod;
 
     /**
-     * Every field must be present and not null.
+     * Every field must be present and not null, except BusyPeriod.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        requireAllNonNull(role, name, phone, email, address, tags);
+        this.role = role;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.busyPeriod = Optional.empty();
+    }
+
+    /**
+     * Every field must be present and not null.
+     */
+    public Person(Role role, Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+                  Optional<BusyPeriod> busyPeriod) {
+        requireAllNonNull(role, name, phone, email, address, tags, busyPeriod);
+        this.role = role;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.busyPeriod = busyPeriod;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     public Name getName() {
@@ -62,7 +89,16 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns an {@code Optional<BusyPeriod>}.
+     */
+    public Optional<BusyPeriod> getBusyPeriod() {
+        return this.busyPeriod;
+    }
+
+
+
+    /**
+     * Returns true if both persons have the same identity.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -84,34 +120,36 @@ public class Person {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof Person)) {
             return false;
         }
 
         Person otherPerson = (Person) other;
-        return name.equals(otherPerson.name)
+        return role.equals(otherPerson.role)
+                && name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && busyPeriod.equals(otherPerson.busyPeriod);
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(role, name, phone, email, address, tags, busyPeriod);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        ToStringBuilder builder = new ToStringBuilder(this)
+                .add("role", role)
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
-                .add("tags", tags)
-                .toString();
-    }
+                .add("tags", tags);
+        busyPeriod.ifPresent(bp -> builder.add("busyPeriod", busyPeriod));
 
+        return builder.toString();
+    }
 }

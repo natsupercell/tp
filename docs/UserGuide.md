@@ -3,10 +3,30 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+CampusConnect is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
 
-* Table of Contents
-{:toc}
+## **Table of Contents**
+
+- [Quick start](#quick-start)
+- [Features](#features)
+    - [Viewing help : `help`](#viewing-help--help)
+    - [Adding a person: `add`](#adding-a-person-add)
+    - [Listing all persons : `list`](#listing-all-persons--list)
+        - [1. Default Listing](#1-default-listing)
+        - [2. Sorted Listing](#2-sorted-listing)
+        - [3. Bonus: Copying of fields in a list](#3-bonus-copying-of-fields-in-a-list)
+    - [Marking a person as busy : `busy`](#marking-a-person-as-busy--busy)
+    - [Editing a person : `edit`](#editing-a-person--edit)
+    - [Locating persons by name: `find`](#locating-persons-by-name-find)
+    - [Deleting a person : `delete`](#deleting-a-person--delete)
+    - [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    - [Exiting the program : `exit`](#exiting-the-program--exit)
+    - [Saving the data](#saving-the-data)
+    - [Editing the data file](#editing-the-data-file)
+    - [Archiving data files `[coming in v2.0]`](#archiving-data-files-coming-in-v20)
+- [FAQ](#faq)
+- [Known issues](#known-issues)
+- [Command summary](#command-summary)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -21,20 +41,24 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+   ![Ui](images/ProductUI_V1-3_home.png)
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+  * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+  * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
-   * `clear` : Deletes all contacts.
+  * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
-   * `exit` : Exits the app.
+  * `delete 3` : Deletes the 3rd contact shown in the current list.
+
+  * `clear` : Deletes all contacts.
+
+  * `exit` : Exits the app.
 
 1. Refer to the [Features](#features) below for details of each command.
 
@@ -47,16 +71,16 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g `-n NAME [-t TAG]` can be used as `-n John Doe -t friend` or as `-n John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  e.g. `[-t TAG]…​` can be used as ` ` (i.e. 0 times), `-t friend`, `-t friend -t family` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `-n NAME -p PHONE_NUMBER`, `-p PHONE_NUMBER -n NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -72,60 +96,138 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
-
 ### Adding a person: `add`
 
 Adds a person to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of tags (including 0)
 </div>
 
+If the person being added does **not** already exist in the address book, the contact will be added immediately.
+
+If the person being added **already exists**, the application will prompt for confirmation before proceeding.
+
+**Duplicate-add confirmation prompt:**
+> `This person already exists: XXX`
+> `Add anyway? [y/n]`
+
+* If `y` is entered, the duplicate contact will be added.
+* If `n` is entered, the add operation will be cancelled.
+
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`
+* `add -r Logistics -n Betsy Crowe -t friend -e betsycrowe@example.com -a Newgate Prison -p 1234567 -t criminal`
 
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.
 
-Format: `list`
+#### 1. Default Listing
+
+Displays all contacts in the order they are stored.
+
+**Format:**
+`
+list
+`
+
+**Example:**
+```
+list
+```
+
+**Expected Result:**
+All contacts are displayed in their default order.
+
+---
+
+#### 2. Sorted Listing
+
+You can sort contacts alphabetically in ascending or descending order.
+
+**Format:**
+`list SORT_ORDER`
+
+**Ascending (A → Z):**
+```
+list sort
+list ascending
+```
+
+**Expected Result:**
+All contacts are displayed in ascending alphabetical order by name.
+
+**Descending (Z → A):**
+
+```
+list descending
+list reverse
+```
+
+**Expected Result:**
+All contacts are displayed in descending alphabetical order by name.
+
+#### 3. Bonus: Copying of fields in a list
+
+You can copy the value of a field (e.g. phone number) of a contact in the list to the clipboard by clicking on the field!
+
+**Expected Result:**
+The field turns pink for a temporary period to indicate that it has been copied, and you can paste the value elsewhere.
+
+### Marking a person as busy : `busy`
+
+Marks a contact as busy for a specific period.
+
+Format: `busy INDEX -s START_DATE -e END_DATE`
+
+* Marks the person at the specified `INDEX` as busy from `START_DATE` to `END_DATE`.
+* The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Dates **must follow the DD/MM/YYYY format** (e.g., 25/03/2026).
+* The `START_DATE` must be chronologically before or equal to the `END_DATE`.
+* If the contact already has a busy period, running a valid `busy` command will overwrite the existing period.
+* The busy period will be displayed in the contact's card in the UI.
+
+Examples:
+* `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
+* `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
 
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
+* You can remove all the person’s tags by typing `-t` without
+  specifying any tags after it.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by name/tags: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names/tags contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* `SEARCH_BY` must be either `name` or `tag` (lowercase).
+* The search is case-insensitive. e.g. `alice` will match `Alice`.
+* Use `;` to separate multiple keywords. Each keyword can contain spaces.
+* Persons matching at least one keyword will be returned (`OR` search).
+* Matching is based on text containment. e.g. `ali` will match `Alice`.
+* Keywords can only contain alphanumeric characters and spaces.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
+* `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
+* `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
+* `find name alex ; david` returns `Alex Yeoh`, `David Li`.<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
@@ -137,10 +239,17 @@ Format: `delete INDEX`
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
+* Before deletion is performed, the application will prompt for confirmation.
+
+**Delete confirmation prompt:**
+> `Are you sure you want to delete the contact: XXX? [y/n]`
+
+* If `y` is entered, the person will be deleted.
+* If `n` is entered, the delete operation will be cancelled.
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete 2` prompts confirmation for deleting the 2nd person in the address book.
+* `find name Betsy` followed by `delete 1` prompts confirmation for deleting the 1st person in the results of the `find` command.
 
 ### Clearing all entries : `clear`
 
@@ -191,10 +300,12 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List** | `list`
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
+**Find** | `find FIELD KEYWORD [MORE_KEYWORDS]`<br> e.g., `find name James Jake`
+**List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
 **Help** | `help`
+

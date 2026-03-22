@@ -18,6 +18,8 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_CONTAINS_NON_ALPHANUMERIC_CHARACTER = "Only give alphanumeric keywords";
+    public static final String MESSAGE_ONLY_YES_NO = "Please enter either \'y\' or \'n\'";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -36,7 +38,9 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
+        builder.append(person.getRole())
+                .append(" ")
+                .append(person.getName())
                 .append("; Phone: ")
                 .append(person.getPhone())
                 .append("; Email: ")
@@ -47,5 +51,4 @@ public class Messages {
         person.getTags().forEach(builder::append);
         return builder.toString();
     }
-
 }

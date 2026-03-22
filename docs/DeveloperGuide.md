@@ -2,8 +2,37 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
+## **Table of Contents**
+
+- [Acknowledgements](#acknowledgements)
+- [Setting up, getting started](#setting-up-getting-started)
+- [Design](#design)
+    - [Architecture](#architecture)
+    - [UI component](#ui-component)
+    - [Logic component](#logic-component)
+    - [Model component](#model-component)
+    - [Storage component](#storage-component)
+    - [Common classes](#common-classes)
+- [Implementation](#implementation)
+    - [Confirmation flow for `add` and `delete`](#confirmation-flow-for-add-and-delete)
+    - [Busy status feature](#busy-status-feature)
+    - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+    - [[Proposed] Data archiving](#proposed-data-archiving)
+- [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+- [Appendix: Requirements](#appendix-requirements)
+    - [Product scope](#product-scope)
+    - [User Stories](#user-stories)
+    - [Use cases](#use-cases)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Glossary](#glossary)
+- [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+    - [Launch and shutdown](#launch-and-shutdown)
+    - [Adding a person](#adding-a-person)
+    - [Deleting a person](#deleting-a-person)
+    - [Finding persons](#finding-persons)
+    - [Listing persons](#listing-persons)
+    - [Marking a person as busy](#marking-a-person-as-busy)
+    - [Saving data](#saving-data)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -155,6 +184,70 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Confirmation flow for `add` and `delete`
+
+The application supports a shared confirmation workflow for commands that should not be executed immediately.
+
+For `delete`, confirmation is always required before the actual deletion is performed.
+
+For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
+
+This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand` and `ConfirmAddCommand` inherit from its base classes (`AddCommand` and `DeleteCommand`), while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
+
+#### Implementation
+
+When the user enters a command, `LogicManager` first calls `AddressBookParser#parseCommandWithConfirmation(...)`.
+
+If the command does not require confirmation, it is executed normally.
+
+If the command requires confirmation, a corresponding `ConfirmCommand` subclass is executed first:
+- `ConfirmDeleteCommand` for `delete`
+- `ConfirmAddCommand` for duplicate `add`
+
+These confirmation commands do not perform the final action immediately. Instead, they return a `CommandResult` indicating that the application is awaiting confirmation input.
+
+`LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms.
+
+After that:
+- if the user enters `y`, the stored command is executed
+- if the user enters `n`, the operation is cancelled
+- if the user enters any other input, the application reports an invalid confirmation input
+
+For duplicate `add`, the stored command is a confirmed `AddCommand`, which force-adds the duplicate contact after the user explicitly confirms. This keeps the confirmation decision in `ConfirmAddCommand` while leaving the actual insertion to `AddCommand`.
+
+#### Design rationale
+
+This design separates:
+- confirmation handling
+- actual command execution
+
+As a result:
+- shared confirmation logic can be reused across multiple commands
+- `ConfirmDeleteCommand` and `ConfirmAddCommand` avoid duplicating common confirmation flow
+- the actual `AddCommand` and `DeleteCommand` remain focused on performing the final data modification
+
+For duplicate `add`, this design also allows normal non-duplicate additions to proceed immediately, while still protecting the user from accidentally adding duplicate contacts.
+
+### Busy status feature
+
+The busy status feature allows users to mark a contact as unavailable for a specific period. This is implemented through the `BusyCommand` and the `BusyPeriod` model.
+
+#### Implementation
+
+The `BusyPeriod` class represents the time interval during which a person is busy. It consists of a `startDate` and an `endDate` (both `LocalDate`).
+
+**Key aspects of the implementation:**
+* **Strict Date Validation:** The `BusyPeriod` uses `DateTimeFormatter` with `ResolverStyle.STRICT` to ensure that dates are valid (e.g., February 29th is only accepted on leap years, and April 31st is rejected).
+* **Logical Validation:** The constructor ensures that the `startDate` is chronologically before or equal to the `endDate`.
+* **Immutability:** `BusyPeriod` is an immutable class, consistent with other model components like `Name` and `Phone`.
+* **Integration with `Person`:** Each `Person` object now contains an `Optional<BusyPeriod>`.
+* **Storage:** The `JsonAdaptedPerson` was updated to persist `busyStartDate` and `busyEndDate` strings, which are then used to reconstruct the `BusyPeriod` during data loading.
+* **UI:** `PersonCard` was updated to display the busy period if it exists. The label is styled with a distinct color to make it easily identifiable.
+
+#### Design rationale
+
+By using an `Optional<BusyPeriod>` in the `Person` class, we maintain backward compatibility with contacts that don't have a busy status. The decision to use strict date resolution prevents subtle bugs where users might input non-existent dates that are silently "rounded" by the default Java date parser.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -177,7 +270,7 @@ Step 2. The user executes `delete 5` command to delete the 5th person in the add
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add -n David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
@@ -216,7 +309,7 @@ Step 5. The user then decides to execute the command `list`. Commands that do no
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add -n David …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -229,15 +322,13 @@ The following activity diagram summarizes what happens when a user executes a ne
 **Aspect: How undo & redo executes:**
 
 * **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
+    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
 
 ### \[Proposed\] Data archiving
 
@@ -276,22 +367,20 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a … | I want to … | So that I can … |
-|---------|--------|-------------|-----------------|
-| `* * *` | user | add a contact | save their details |
-| `* * *` | user | delete a contact | remove outdated contacts from the database |
-| `* * *` | user | search for a contact by name | quickly find the details of someone based on their name |
-| `* * *` | returning user | view a complete list of all stored contacts | scroll through my network to see all available contacts |
-| `* *` | first-time user | view sample contacts of student leaders and their schedules | understand how the coordination features work without needing to manually input data first |
-| `* *` | user | edit a contact | update their details in the future |
-| `* *` | user who manages many communities | tag and search contacts by committee (e.g. Welfare, Rag) | quickly group leaders and identify which student body they belong to |
-| `* *` | busy student leader | add a "busy" indicator for contacts who have events during a specific week | record periods when certain people are unavailable |
-| `* *` | busy student leader | filter and view contacts who have events during a specific week | avoid scheduling coordination meetings during peak event periods |
-| `*` | user | duplicate a contact | quickly create another contact based on an existing one |
-| `*` | forgetful user | add a new contact with only some of the required fields | quickly record someone I just met before I forget their details |
-| `*` | user ready to adopt the app | mass-import contact details from a CSV or Excel file | onboard hundreds of committee leaders efficiently without manual entry |
-
-*{More to be added}*
+| Priority | As a … | I want to …                                                                | So that I can …                                                                            |
+|---------|--------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| `* * *` | user | add a contact                                                              | save their details                                                                         |
+| `* * *` | user | delete a contact                                                           | remove outdated contacts from the database                                                 |
+| `* * *` | user | search for a contact by name                                               | quickly find the details of someone based on their name                                    |
+| `* * *` | returning user | view a useful list of all stored contacts                                  | scroll through my network customised for ease of viewing to access all available contacts  |
+| `* *` | first-time user | view sample contacts of student leaders and their schedules                | understand how the coordination features work without needing to manually input data first |
+| `* *` | user | edit a contact                                                             | update their details in the future                                                         |
+| `* *` | user who manages many communities | tag and search contacts by committee (e.g. Welfare, Rag)                   | quickly group leaders and identify which student body they belong to                       |
+| `* *` | busy student leader | add a "busy" indicator for contacts who have events during a specific week | record periods when certain people are unavailable                                         |
+| `* *` | busy student leader | filter and view contacts who have events during a specific week            | avoid scheduling coordination meetings during peak event periods                           |
+| `*` | user | duplicate a contact                                                        | quickly create another contact based on an existing one                                    |
+| `*` | forgetful user | add a new contact with only some of the required fields                    | quickly record someone I just met before I forget their details                            |
+| `*` | user ready to adopt the app | mass-import contact details from a CSV or Excel file                       | onboard hundreds of committee leaders efficiently without manual entry                     |
 
 ### Use cases
 
@@ -383,7 +472,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * Use case ends.
 * 3b. CampusConnect detects a duplicate contact (same name and committee).
     * 3b1. CampusConnect warns Marcus about the potential duplicate.
-    * 3b2. Marcus chooses to either cancel the entry or proceed with a unique identifier.
+    * 3b2. Marcus chooses to either cancel the entry or proceed with confirmation.
     * Use case resumes at step 4.
 
 ---
@@ -424,6 +513,43 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 2a2. Marcus enters a new search query.
     * Use case resumes at step 2.
 
+---
+
+**UC07: List All Contacts without Sorting**
+
+**Goal:** To view all stored contacts quickly in the default order.
+
+**MSS (Main Success Scenario):**
+1. Marcus instructs the application to list all contact without sorting.
+2. CampusConnect displays all stored contacts in the default order - order of creation.
+   Use case ends.
+
+**Extensions:**
+* 2a. No contacts exist in the system.
+    * 2a1. CampusConnect displays a "No contacts found" message.
+    * 2a2. Marcus can choose to **add a contact** (resumes at UC04 step 1).
+
+---
+
+**UC08: List All Contacts with Sorting**
+
+**Goal:** To view all stored contacts quickly and optionally sort them in ascending or descending order.
+
+**MSS (Main Success Scenario):**
+1. Marcus instructs the application to list all contact with a sorting order.
+2. CampusConnect displays all stored contacts in the instructed order (e.g., ascending, descending).
+   Use case ends.
+
+**Extensions:**
+* 2a. No contacts exist in the system.
+    * 2a1. CampusConnect displays a "No contacts found" message.
+    * 2a2. Marcus can choose to **add a contact** (resumes at UC04 step 1).
+* 3a. Marcus enters an invalid sorting instruction.
+    * 3a1. CampusConnect displays an error message explaining the command format.
+    * 3a2. Marcus re-enters a valid sort field.
+    * Use case resumes at step 1.
+
+---
 ### Non-Functional Requirements
 
 1. Portability
@@ -431,11 +557,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     2. Should not depend on any remote server.
 2. Scalability
     1. Should be able to hold up to **100 contacts** without a noticeable sluggishness in performance for typical usage.
-3. CLI Productivity 
+3. CLI Productivity
     1. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4. Performance 
+4. Performance
     1. Should return search results within **1 second** for about **1000 stored contacts**.
-5. Usability 
+5. Usability
     1. A new user should be able to learn basic commands (add, delete, find, list) within **10 minutes** using the provided user guide.
 6. Data Storage
     1. Should not use a _Database Management System (DBMS)_ to store data.
@@ -471,57 +597,189 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * **CLI command**: A text-based instruction entered by the user to perform an action in the application (e.g., `add`, `delete`, `find`, `list`).
 
-*{More to be added}*
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
 
 Given below are instructions to test the app manually.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** These instructions only provide a starting point for testers to work on;
+**Note:** These instructions only provide a starting point for testers to work on;
 testers are expected to do more *exploratory* testing.
-
-</div>
 
 ### Launch and shutdown
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+    2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+    2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Adding a person
+
+1. Adding a non-duplicate person
+
+    1. Prerequisites: The person to be added does not already exist in the address book.
+
+    2. Test case: `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`<br>
+       Expected: The person is added immediately. A success message showing the added contact is displayed. The contact list is updated accordingly.
+
+2. Adding a duplicate person
+
+    1. Prerequisites: The address book already contains `John Doe` with the same details.
+
+    2. Test case: `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` followed by `y`<br>
+       Expected: A confirmation prompt indicating that the person already exists is shown. After entering `y`, the duplicate contact is added successfully.
+
+    3. Test case: `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` followed by `n`<br>
+       Expected: A confirmation prompt indicating that the person already exists is shown. After entering `n`, the operation is cancelled and no additional contact is added.
+
+    4. Test case: `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01` followed by an invalid confirmation input such as `maybe`<br>
+       Expected: The application reports that only `y` or `n` is accepted as confirmation input.
+
+3. Invalid add commands
+
+    1. Test case: `add -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`<br>
+       Expected: Error message shown indicating missing required fields.
+
+    2. Test case: `add -r President -n John Doe -p invalid -e johnd@example.com -a John street, block 123, #01-01`<br>
+       Expected: Error message shown indicating invalid phone number format.
+
+    3. Test case: `add -r President -n John Doe -p 98765432 -e invalid -a John street, block 123, #01-01`<br>
+       Expected: Error message shown indicating invalid email format.
 
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    2. Test case: `delete 1` followed by `y`<br>
+       Expected: A confirmation prompt `Are you sure you want to delete the contact [Contact Details]? [y/n]` is shown. After entering `y`, the first contact is deleted from the list. The success message `Successfully Deleted Person: [Contact Details]` is shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    3. Test case: `delete 1` followed by `n`<br>
+       Expected: A confirmation prompt `Are you sure you want to delete the contact [Contact Details]? [y/n]` is shown. After entering `n`, the deletion is aborted. No person is deleted and the list remains unchanged.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+    4. Test case: `delete 0`<br>
+       Expected: No confirmation prompt is shown. No person is deleted. Error details (indicating INDEX must be a positive number) are shown in the status message. Status bar remains the same.
 
-1. _{ more test cases …​ }_
+    5. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size), `delete abc`<br>
+       Expected: Similar to the previous case. An invalid command or out-of-bounds error is shown immediately without triggering the confirmation prompt.
+
+
+### Finding persons
+
+1. Finding persons by name
+
+   1. Prerequisites: The app contains multiple contacts with different names.
+
+   2. Test case: `find John`
+      Expected: All contacts with names containing "John" are displayed.
+
+   3. Test case: `find alice`
+      Expected: Contacts matching "alice" are displayed (case-insensitive).
+
+   4. Test case: `find John; alice`
+        Expected: Contacts matching "John" and "alice" are displayed (case-insensitive).
+
+2. Finding persons by partial match
+
+    1. Prerequisites: The app contains contacts such as "Jonathan", "Johnny", "John Doe".
+
+    2. Test case: `find John`
+       Expected: All contacts with names containing "John" (e.g., "Jonathan", "Johnny", "John Doe") are displayed.
+
+3. Finding persons with no matches
+
+    1. Prerequisites: The app contains multiple contacts.
+
+    2. Test case: `find xyz`
+       Expected: No contacts are displayed. A message indicating no matches found is shown.
+
+4. Invalid find commands
+
+    1. Test case: `find`
+       Expected: Error message shown indicating invalid command format.
+
+    2. Test case: `find @@@`
+       Expected: Error message shown indicating invalid command format.
+
+### Listing persons
+
+1. Listing persons without sorting
+
+    1. Prerequisites: The app contains multiple contacts with different names.
+
+    2. Test case: `list`
+      Expected: All contacts are displayed in their default order.
+
+2. Listing persons in ascending order
+
+    1. Prerequisites: Multiple contacts exist with different names.
+
+    2. Test case: `list sort`
+       Expected: All contacts are displayed sorted in ascending alphabetical order of their names.
+
+    3. Test case: `list ascending`
+       Expected: Same behaviour as `list sort`.
+
+3. Listing persons in descending order
+
+    1. Prerequisites: Multiple contacts exist with different names.
+
+    2. Test case: `list descending`
+       Expected: All contacts are displayed sorted in descending alphabetical order of their names.
+
+    3. Test case: `list reverse`
+       Expected: Same behaviour as `list descending`.
+
+4. Invalid list commands
+
+    1. Test case: `list abc`
+       Expected: Error message shown indicating invalid command format.
+
+    2. Test case: `list sort abc`
+       Expected: Error message shown indicating invalid command format.
+
+    3. Test case: `list ascending descending`
+       Expected: Error message shown indicating invalid command format.
+
+### Marking a person as busy
+
+1. Marking a person as busy with valid dates
+
+    1. Prerequisites: Multiple persons in the list.
+
+    2. Test case: `busy 1 -s 25/03/2026 -e 28/03/2026`<br>
+       Expected: The first person is marked as busy. A success message is shown. The person's card in the UI displays the busy period.
+
+2. Overwriting an existing busy period
+
+    1. Prerequisites: The first person already has a busy period.
+
+    2. Test case: `busy 1 -s 01/04/2026 -e 05/04/2026`<br>
+       Expected: The existing busy period is overwritten with the new one. Success message and UI update accordingly.
+
+3. Invalid busy commands
+
+    1. Test case: `busy 1 -s 31/04/2026 -e 01/05/2026` (Strict date validation: April only has 30 days)<br>
+       Expected: Error message shown indicating that dates must follow the DD/MM/YYYY format and be valid calendar dates.
+
+    2. Test case: `busy 1 -s 28/03/2026 -e 25/03/2026` (Start date after end date)<br>
+       Expected: Error message shown: "The start date cannot be later than the end date."
+
+    3. Test case: `busy x -s 25/03/2026 -e 28/03/2026` (where x is out of bounds)<br>
+       Expected: Error message shown indicating invalid person displayed index.
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. TODO _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
-1. _{ more test cases …​ }_

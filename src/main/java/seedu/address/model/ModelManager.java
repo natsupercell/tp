@@ -4,11 +4,13 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
@@ -22,6 +24,9 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final SortedList<Person> sortedFilteredPersons;
+    private final Comparator<Person> ascendingComparator;
+    private final Comparator<Person> descendingComparator;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -34,6 +39,16 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        sortedFilteredPersons = new SortedList<>(filteredPersons);
+
+        ascendingComparator = Comparator
+                .comparing((Person p) -> p.getName().fullName,
+                        String.CASE_INSENSITIVE_ORDER
+                ).thenComparing(p -> p.getName().fullName);
+
+        descendingComparator = ascendingComparator.reversed();
+
+        sortedFilteredPersons.setComparator(null);
     }
 
     public ModelManager() {
@@ -105,6 +120,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void addPersonAllowingDuplicate(Person person) {
+        addressBook.addPersonAllowingDuplicate(person);
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+    }
+
+    @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
@@ -118,8 +139,13 @@ public class ModelManager implements Model {
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
+    public ObservableList<Person> getSortedFilteredPersonList() {
+        return sortedFilteredPersons;
+    }
+
+    @Override
+    public void updateSortedPersonList(Comparator<Person> comparator) {
+        sortedFilteredPersons.setComparator(comparator);
     }
 
     @Override
@@ -144,5 +170,4 @@ public class ModelManager implements Model {
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
-
 }
