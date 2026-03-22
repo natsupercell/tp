@@ -194,6 +194,34 @@ Examples:
 * `list` followed by `busy 1 -s 25/03/2026 -e 28/03/2026` marks the 1st person in the list as busy from March 25 to March 28, 2026.
 * `find name Betsy` followed by `busy 1 -s 01/04/2026 -e 05/04/2026` marks the 1st person in the results as busy.
 
+### Locating persons by busy period: `busyfilter`
+
+Filters and displays contacts who are busy during a specified date range.
+
+A contact is considered busy if there exists at least one day within the given period such that the contact has an event on that day.
+
+Otherwise, the contact is considered not busy if for all days in the specified period, the contact is not busy.
+
+#### Basic Usage
+
+Shows all contacts who are busy at **any point within the given date range**.
+
+**Format:**
+`
+busyfilter -s START_DATE -e END_DATE
+`
+
+* `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
+* Contacts with busy period are considered available and will not be displayed.
+
+**Example:**
+```
+busyfilter -s 01/01/2026 -e 31/01/2026
+```
+
+**Expected Result:**
+All contacts who have are busy on any day from 1 Jan 2026 to 31 Jan 2026 are listed.
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
