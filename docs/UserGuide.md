@@ -3,11 +3,17 @@ layout: page
 title: User Guide
 ---
 
+<div markdown="block" class="intro-box">
+
+# CampusConnect
+
 CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimized for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI).
 
 CampusConnect is especially suited for a **NUSSU secretary or student leader managing many contacts across different committees**, who needs quick access to contact details and availability. The app allows users to efficiently store, search, and organise contacts, as well as track when individuals are busy due to meetings or events.
 
 By enabling fast command-based interactions, CampusConnect helps users **quickly retrieve information and identify scheduling conflicts**, reducing the time spent navigating scattered contact lists and improving coordination across student leadership bodies.
+
+</div>
 
 ### Assumptions About Target Users
 
@@ -122,7 +128,9 @@ Adds a person to the address book.
 
 Format: `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">
+
+:bulb: **Tip:**<br>
 
 A person can have any number of tags (including 0)
 </div>
@@ -152,9 +160,7 @@ Shows a list of all persons in the address book.
 Displays all contacts in the order they are stored.
 
 **Format:**
-`
-list
-`
+`list`
 
 **Example:**
 ```
@@ -203,7 +209,9 @@ Marks a contact as busy for a specific period.
 
 Format: `busy INDEX -s START_DATE -e END_DATE`
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">
+
+:exclamation: **Caution:**<br>
 
 Running `busy` again for the same contact replaces the previous busy period instead of merging date ranges.
 </div>
@@ -232,9 +240,7 @@ Otherwise, the contact is considered not busy if for all days in the specified p
 Shows all contacts who are busy at **any point within the given date range**.
 
 **Format:**
-`
-busyfilter -s START_DATE -e END_DATE
-`
+`busyfilter -s START_DATE -e END_DATE`
 
 * `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
 * Contacts with busy period are considered available and will not be displayed.
@@ -284,7 +290,9 @@ Finds persons whose names/tags contain any of the given keywords.
 
 Format: `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">
+
+:bulb: **Tip:**<br>
 
 Use `;` to split phrases into multiple search groups, e.g. `find name alice pauline ; josh`.
 </div>
@@ -299,7 +307,7 @@ Use `;` to split phrases into multiple search groups, e.g. `find name alice paul
 Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
 * `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
-* `find name yi` returns `Yi Heng`, `Yi Kang`.<br>
+* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
   ![result for 'find name heng ; kang'](images/findNameHengKang.png)
 
 ### Deleting a person : `delete`
@@ -308,7 +316,9 @@ Deletes the specified person from the address book.
 
 Format: `delete INDEX`
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">
+
+:exclamation: **Caution:**<br>
 
 `INDEX` refers to the currently displayed list. Run `list` first if you want to delete from the full contact list.
 </div>
@@ -334,7 +344,9 @@ Clears the contacts currently shown in the list.
 
 Format: `clear`
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">
+
+:exclamation: **Caution:**<br>
 
 `clear` affects all contacts currently shown in the list. If the list is filtered, only the filtered contacts are targeted.
 </div>
@@ -367,7 +379,9 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">
+
+:exclamation: **Caution:**<br>
 
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 
