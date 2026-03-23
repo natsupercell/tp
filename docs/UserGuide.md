@@ -56,7 +56,7 @@ To ensure this guide is effective, we assume the target user:
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases/tag/v1.3).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
@@ -310,8 +310,8 @@ Use `;` to split phrases into multiple search groups, e.g. `find name alice paul
 
 Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
-* `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
-* `find name yi` returns `Yi Heng`, `Yi Kang`.<br>
+* `find tag RAG2026 ; finance department ; secretaries` returns persons with tags containing `RAG2026`, `finance department`, or `secretaries`.
+* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
   ![result for 'find name heng ; kang'](images/findNameHengKang.png)
 
 ### Deleting a person : `delete`
@@ -388,6 +388,8 @@ CampusConnect data are saved automatically as a JSON file `[JAR file location]/d
 <div markdown="span" class="alert alert-warning">
 
 :exclamation: **Caution:**<br><br>
+
+If you are a student user (e.g. NUSSU Secretary) that is not tech-savvy, you are not recommended to edit this file.
 
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 
