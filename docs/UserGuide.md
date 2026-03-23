@@ -142,8 +142,6 @@ list
 **Expected Result:**
 All contacts are displayed in their default order.
 
----
-
 #### 2. Sorted Listing
 
 You can sort contacts alphabetically in ascending or descending order.
