@@ -53,15 +53,27 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 
   * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
-  * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -n John Doe -p 98765432 -e johnd@example.com -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+
+  <div markdown="block" class="alert alert-info">
+
+**:information_source: Command confirmation:**<br>
+  Certain commands like `delete` and `clear` will ask for confirmation. Input `y` to confirm or `n` to cancel.
+
+
+</div>
+
+
 
   * `delete 3` : Deletes the 3rd contact shown in the current list.
+
+  * `busy 1 -s 23/03/2026 -e 30/03/2026` : Marks the 1st contact in the list as busy from 23 March 2026 to 30 March 2026.
 
   * `clear` : Deletes listed/filtered contacts.
 
   * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
