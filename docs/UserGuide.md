@@ -3,7 +3,11 @@ layout: page
 title: User Guide
 ---
 
-CampusConnect is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimized for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI).
+
+CampusConnect is especially suited for a **NUSSU secretary or student leader managing many contacts across different committees**, who needs quick access to contact details and availability. The app allows users to efficiently store, search, and organise contacts, as well as track when individuals are busy due to meetings or events.
+
+By enabling fast command-based interactions, CampusConnect helps users **quickly retrieve information and identify scheduling conflicts**, reducing the time spent navigating scattered contact lists and improving coordination across student leadership bodies.
 
 ## **Table of Contents**
 
@@ -53,15 +57,23 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 
   * `find name Alice ; Benson` : Find contacts with name including Alice or Benson.
 
-  * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+  * `add -n John Doe` : Adds a contact named `John Doe` with no other fields to the Address Book.
+  * `add -n John Doe -p 98765432 -e johnd@example.com -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+
+  <div markdown="block" class="alert alert-info">
+**:information_source: Command confirmation:**<br>
+  Certain commands like `delete` and `clear` will ask for confirmation. Input `y` to confirm or `n` to cancel.
+</div>
 
   * `delete 3` : Deletes the 3rd contact shown in the current list.
+
+  * `busy 1 -s 23/03/2026 -e 30/03/2026` : Marks the 1st contact in the list as busy from 23 March 2026 to 30 March 2026.
 
   * `clear` : Deletes listed/filtered contacts.
 
   * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -101,7 +113,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​`
+Format: `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
 <div markdown="span" class="alert alert-primary">
 
@@ -122,6 +134,7 @@ If the person being added **already exists**, the application will prompt for co
 * If `n` is entered, the add operation will be cancelled.
 
 Examples:
+* `add -n John Doe`
 * `add -r President -n John Doe -p 98765432 -e johnd@example.com -a John street, block 123, #01-01`
 * `add -r Logistics -n Betsy Crowe -t friend -e betsycrowe@example.com -a Newgate Prison -p 1234567 -t criminal`
 
@@ -244,6 +257,20 @@ Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS
 * You can remove all the person’s tags by typing `-t` without
   specifying any tags after it.
 
+Before the edit is performed, the application will prompt for confirmation.
+
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
+If the edited person duplicates an existing person, the application will also show a warning before prompting for confirmation.
+
+**Duplicate-edit confirmation prompt:**
+> `Warning: XXX`<br>
+> `is an existing person.`<br>
+> `Are you sure you want to edit the contact: YYY? [y/n]`
+
+* If `y` is entered, the edit will proceed.
+* If `n` is entered, the edit will be cancelled.
+
 Examples:
 *  `edit 1 -p 91234567 -e johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 -n Betsy Crower -t` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
@@ -271,8 +298,8 @@ Use `;` to split phrases into multiple search groups, e.g. `find name alice paul
 Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
 * `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
-* `find name alex ; david` returns `Alex Yeoh`, `David Li`.<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find name yi` returns `Yi Heng`, `Yi Kang`.<br>
+  ![result for 'find name heng ; kang'](images/findNameHengKang.png)
 
 ### Deleting a person : `delete`
 
@@ -376,12 +403,12 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
+**Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
 **BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
+**Delete** | `delete INDEX`<br> e.g., `delete 3` (then confirm with `y` or cancel with `n`)
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com` (then confirm with `y` or cancel with `n`)
 **Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
 **List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
 **Help** | `help`
