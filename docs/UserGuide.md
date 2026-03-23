@@ -3,11 +3,17 @@ layout: page
 title: User Guide
 ---
 
+<div markdown="block" class="intro-box">
+
+# CampusConnect
+
 CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimized for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI).
 
 CampusConnect is especially suited for a **NUSSU secretary or student leader managing many contacts across different committees**, who needs quick access to contact details and availability. The app allows users to efficiently store, search, and organise contacts, as well as track when individuals are busy due to meetings or events.
 
 By enabling fast command-based interactions, CampusConnect helps users **quickly retrieve information and identify scheduling conflicts**, reducing the time spent navigating scattered contact lists and improving coordination across student leadership bodies.
+
+</div>
 
 ## **Table of Contents**
 
@@ -147,9 +153,7 @@ Shows a list of all persons in the address book.
 Displays all contacts in the order they are stored.
 
 **Format:**
-`
-list
-`
+`list`
 
 **Example:**
 ```
@@ -229,9 +233,7 @@ Otherwise, the contact is considered not busy if for all days in the specified p
 Shows all contacts who are busy at **any point within the given date range**.
 
 **Format:**
-`
-busyfilter -s START_DATE -e END_DATE
-`
+`busyfilter -s START_DATE -e END_DATE`
 
 * `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
 * Contacts with busy period are considered available and will not be displayed.
@@ -298,7 +300,7 @@ Use `;` to split phrases into multiple search groups, e.g. `find name alice paul
 Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
 * `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
-* `find name yi` returns `Yi Heng`, `Yi Kang`.<br>
+* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
   ![result for 'find name heng ; kang'](images/findNameHengKang.png)
 
 ### Deleting a person : `delete`
