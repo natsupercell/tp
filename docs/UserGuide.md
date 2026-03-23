@@ -9,15 +9,16 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
 
 - [Quick start](#quick-start)
 - [Features](#features)
-    - [Viewing help : `help`](#viewing-help--help)
+    - [Viewing help: `help`](#viewing-help--help)
     - [Adding a person: `add`](#adding-a-person-add)
-    - [Listing all persons : `list`](#listing-all-persons--list)
+    - [Listing all persons: `list`](#listing-all-persons--list)
         - [1. Default Listing](#1-default-listing)
         - [2. Sorted Listing](#2-sorted-listing)
         - [3. Bonus: Copying of fields in a list](#3-bonus-copying-of-fields-in-a-list)
     - [Marking a person as busy : `busy`](#marking-a-person-as-busy--busy)
+    - [Locating persons by busy period: `busyfilter`](#locating-persons-by-busy-period-busyfilter)
     - [Editing a person : `edit`](#editing-a-person--edit)
-    - [Locating persons by name: `find`](#locating-persons-by-name-find)
+    - [Locating persons by name/tags: `find`](#locating-persons-by-nametags-find)
     - [Deleting a person : `delete`](#deleting-a-person--delete)
     - [Clearing all entries : `clear`](#clearing-all-entries--clear)
     - [Exiting the program : `exit`](#exiting-the-program--exit)
@@ -224,7 +225,7 @@ All contacts who have are busy on any day from 1 Jan 2026 to 31 Jan 2026 are lis
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
+Format: `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -328,10 +329,12 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
 **Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
+**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
-**Find** | `find FIELD KEYWORD [MORE_KEYWORDS]`<br> e.g., `find name James Jake`
+**Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
 **List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
 **Help** | `help`
+**Exit** | `exit`
 
