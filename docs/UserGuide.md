@@ -3,11 +3,27 @@ layout: page
 title: User Guide
 ---
 
-CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimized for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI).
+<div markdown="block" class="intro-box">
+# **CampusConnect**
+
+CampusConnect is a **desktop contact management application designed for student leaders who need to coordinate across multiple university committees**. It is optimised for use via a Command Line Interface (CLI), while still providing the benefits of a Graphical User Interface (GUI). 
 
 CampusConnect is especially suited for a **NUSSU secretary or student leader managing many contacts across different committees**, who needs quick access to contact details and availability. The app allows users to efficiently store, search, and organise contacts, as well as track when individuals are busy due to meetings or events.
 
-By enabling fast command-based interactions, CampusConnect helps users **quickly retrieve information and identify scheduling conflicts**, reducing the time spent navigating scattered contact lists and improving coordination across student leadership bodies.
+By enabling fast command-based interactions, CampusConnect helps users familiar with CLI to **quickly retrieve information and identify scheduling conflicts**, reducing the time spent navigating scattered contact lists and improving coordination across student leadership bodies.
+
+</div>
+
+<div markdown="block" class="alert alert-info">
+
+:information_source: **Assumptions About Target Users**
+
+To ensure this guide is effective, we assume the target user:
+* **Possesses basic technical proficiency:** Can comfortably install standard software like `Java 17` and navigate a computer's file system to run `.jar` files.
+* **Is comfortable with typing:** Prefers keyboard-driven navigation and is willing to learn a Command Line Interface (`CLI`) to execute command-based interactions for faster data entry.
+* **Understands university administrative structures:** Is familiar with managing contacts across various student leadership bodies, committees, and event planning schedules.
+
+</div>
 
 ## **Table of Contents**
 
@@ -44,7 +60,7 @@ By enabling fast command-based interactions, CampusConnect helps users **quickly
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar campusconnect.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/ProductUI_V1-3_home.png)
 
@@ -148,9 +164,7 @@ Shows a list of all persons in the address book.
 Displays all contacts in the order they are stored.
 
 **Format:**
-`
-list
-`
+`list`
 
 **Example:**
 ```
@@ -230,9 +244,7 @@ Otherwise, the contact is considered not busy if for all days in the specified p
 Shows all contacts who are busy at **any point within the given date range**.
 
 **Format:**
-`
-busyfilter -s START_DATE -e END_DATE
-`
+`busyfilter -s START_DATE -e END_DATE`
 
 * `START_DATE` and `END_DATE` must be in `DD/MM/YYYY` format.
 * Contacts with busy period are considered available and will not be displayed.
@@ -310,7 +322,9 @@ Deletes the specified person from the address book.
 
 <div markdown="span" class="alert alert-warning">
 
-:exclamation: **Caution:**<br><br>
+:exclamation: 
+
+**Caution:**<br><br>
 
 `INDEX` refers to the currently displayed list. Run `list` first if you want to delete from the full contact list.
 </div>
@@ -365,11 +379,11 @@ Exits the program.
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+CampusConnect data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+CampusConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. 
 
 <div markdown="span" class="alert alert-warning">
 
