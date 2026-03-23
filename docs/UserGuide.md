@@ -56,7 +56,7 @@ To ensure this guide is effective, we assume the target user:
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-W13-3/tp/releases/tag/v1.3).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
@@ -310,8 +310,8 @@ Use `;` to split phrases into multiple search groups, e.g. `find name alice paul
 
 Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
-* `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
-* `find name yi` returns `Yi Heng`, `Yi Kang`.<br>
+* `find tag RAG2026 ; finance department ; secretaries` returns persons with tags containing `RAG2026`, `finance department`, or `secretaries`.
+* `find name heng ; kang` returns `Yi Heng`, `Yi Kang`.<br>
   ![result for 'find name heng ; kang'](images/findNameHengKang.png)
 
 ### Deleting a person : `delete`
@@ -389,6 +389,8 @@ CampusConnect data are saved automatically as a JSON file `[JAR file location]/d
 
 :exclamation: **Caution:**<br><br>
 
+If you are a student user (e.g. NUSSU Secretary) that is not tech-savvy, you are not recommended to edit this file.
+
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
@@ -420,12 +422,12 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add [-r ROLE] -n NAME [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​` <br><br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
 **Clear** | `clear` (then confirm with `y` or cancel with `n`)
-**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
-**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
-**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com` <br>(then confirm with `y` or cancel with `n`)
-**Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br> e.g., `find name alex ; david`
-**List** | `list [SORT_ORDER]`<br> e.g., `list reverse`
+**Busy** | `busy INDEX -s START_DATE -e END_DATE`<br><br> e.g., `busy 1 -s 25/03/2026 -e 28/03/2026`
+**BusyFilter** | `busyfilter -s START_DATE -e END_DATE`<br><br> e.g., `busyfilter -s 01/01/2026 -e 31/01/2026`
+**Delete** | `delete INDEX`<br><br> e.g., `delete 3`<br>(then confirm with `y` or cancel with `n`)
+**Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br><br> e.g.,`edit 2 -n James Lee -e jameslee@example.com` <br>(then confirm with `y` or cancel with `n`)
+**Find** | `find SEARCH_BY KEYWORD [; MORE_KEYWORDS]...`<br><br> e.g., `find name alex ; david`
+**List** | `list [SORT_ORDER]`<br><br> e.g., `list reverse`
 **Help** | `help`
 **Exit** | `exit`
 
