@@ -259,7 +259,7 @@ Examples:
 * `find name alice pauline ; josh` returns persons whose names contain `alice pauline` or `josh`.
 * `find tag friends ; owes me ; secretary` returns persons with tags containing `friends`, `owes me`, or `secretary`.
 * `find name alex ; david` returns `Alex Yeoh`, `David Li`.<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+  ![result for 'find name yi'](images/findNameYi.png)
 
 ### Deleting a person : `delete`
 
