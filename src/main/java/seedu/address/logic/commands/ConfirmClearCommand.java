@@ -13,7 +13,7 @@ import seedu.address.model.person.Person;
  */
 public class ConfirmClearCommand extends ClearCommand implements ConfirmCommand {
     public static final String MESSAGE_ASK_CONFIRMATION =
-            "Are you sure you want to clear the listed contacts? [y/n] %1$s";
+            "Are you sure you want to clear the currently listed contacts? [y/n]%1$s";
 
     @Override
     public CommandResult execute(Model model) {
@@ -32,10 +32,11 @@ public class ConfirmClearCommand extends ClearCommand implements ConfirmCommand 
 
         StringBuilder sb = new StringBuilder();
         lastShownList.stream()
-                .map(person -> "\n" + Messages.format(person))
-                .forEach(sb::append);
+                .map(Messages::format)
+                .forEach(formattedPerson -> sb.append("\n").append(formattedPerson));
 
-        return String.format(MESSAGE_ASK_CONFIRMATION, sb);
+        String listedContactsPreview = sb.toString();
+        return String.format(MESSAGE_ASK_CONFIRMATION, listedContactsPreview);
     }
 
     @Override

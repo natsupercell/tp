@@ -10,12 +10,12 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Clears the address book.
+ * Clears the contacts currently shown in the list.
  */
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_SUCCESS = "Listed contacts has been cleared!";
+    public static final String MESSAGE_SUCCESS = "Listed contacts have been cleared.";
 
 
     @Override

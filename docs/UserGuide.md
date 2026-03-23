@@ -18,7 +18,7 @@ CampusConnect is a **desktop app for managing contacts, optimized for use via a 
     - [Editing a person : `edit`](#editing-a-person--edit)
     - [Locating persons by name: `find`](#locating-persons-by-name-find)
     - [Deleting a person : `delete`](#deleting-a-person--delete)
-    - [Clearing all entries : `clear`](#clearing-all-entries--clear)
+    - [Clearing listed/filtered entries : `clear`](#clearing-listedfiltered-entries--clear)
     - [Exiting the program : `exit`](#exiting-the-program--exit)
     - [Saving the data](#saving-the-data)
     - [Editing the data file](#editing-the-data-file)
@@ -235,9 +235,23 @@ Examples:
 
 ### Clearing listed/filtered entries : `clear`
 
-Clears listed/filtered entries currently shown in the address book.
+Clears the contacts currently shown in the list.
 
 Format: `clear`
+
+* The command targets only the currently listed/filtered contacts.
+* A confirmation prompt is shown before contacts are removed.
+
+**Clear confirmation prompt:**
+> `Are you sure you want to clear the currently listed contacts? [y/n]`
+
+* If `y` is entered, the listed/filtered contacts are deleted.
+* If `n` is entered, the operation is cancelled.
+
+Examples:
+* `list` followed by `clear` then `y` clears all currently listed contacts.
+* `find tag friends` followed by `clear` then `y` clears only the filtered contacts in that result.
+* `clear` followed by `n` cancels the operation and leaves all contacts unchanged.
 
 ### Exiting the program : `exit`
 
@@ -283,7 +297,7 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add -r ROLE -n NAME -p PHONE_NUMBER -e EMAIL -a ADDRESS [-t TAG]…​` <br> e.g., `add -r President -n James Ho -p 22224444 -e jamesho@example.com -a 123, Clementi Rd, 1234665 -t friend -t colleague`
-**Clear** | `clear`
+**Clear** | `clear` (then confirm with `y` or cancel with `n`)
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [-r ROLE] [-n NAME] [-p PHONE_NUMBER] [-e EMAIL] [-a ADDRESS] [-t TAG]…​`<br> e.g.,`edit 2 -n James Lee -e jameslee@example.com`
 **Find** | `find FIELD KEYWORD [MORE_KEYWORDS]`<br> e.g., `find name James Jake`
