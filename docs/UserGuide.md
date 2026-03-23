@@ -14,6 +14,17 @@ By enabling fast command-based interactions, CampusConnect helps users familiar 
 
 </div>
 
+<div markdown="block" class="alert alert-info">
+
+:information_source: **Assumptions About Target Users**
+
+To ensure this guide is effective, we assume the target user:
+* **Possesses basic technical proficiency:** Can comfortably install standard software like `Java 17` and navigate a computer's file system to run `.jar` files.
+* **Is comfortable with typing:** Prefers keyboard-driven navigation and is willing to learn a Command Line Interface (`CLI`) to execute command-based interactions for faster data entry.
+* **Understands university administrative structures:** Is familiar with managing contacts across various student leadership bodies, committees, and event planning schedules.
+
+</div>
+
 ## **Table of Contents**
 
 - [Quick start](#quick-start)
