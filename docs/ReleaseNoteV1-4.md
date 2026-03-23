@@ -10,6 +10,12 @@
 - Enhanced the UI to display busy periods on contact cards.
 - Made contact fields, including busy periods, copyable by clicking.
 
+### Changes from MVP to Alpha Release - Optional Fields for Contacts
+- Modified the `add` command so that `Role`, `Phone`, `Email`, and `Address` are completely optional fields (only `Name` remains strictly required).
+- Adjusted the `PersonCard` contact user interface to dynamically collapse and hide missing fields, creating a cleaner viewing layout for concise profiles.
+- Streamlined success command message formats to elegantly omit fields that were not provided.
+- Persisted data safely handling missing fields through improved JSON mapping logic using `java.util.Optional`.
+
 ### Changes from MVP to Alpha Release - ABC bla bla bla
 
 
