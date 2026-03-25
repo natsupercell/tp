@@ -145,7 +145,7 @@ Here is another sequence diagram illustrating the interactions within the `Logic
 How the `Logic` component works (overlapping content are simplified):
 
 * Similar to the `delete 1` command above, `AddressBookParser` creates a `ListCommandParser` which parses the argument `reverse` and returns a `ListCommand` object.
-* This command object is executed by `LogicManager` which communicates with the `Model` to update the sorted & filtered list of `Person` objects in the `Model` to be in reverse order. 
+* This command object is executed by `LogicManager` which communicates with the `Model` to update the sorted & filtered list of `Person` objects in the `Model` to be in reverse order. Do note that there is no return value from the `Model` to the `Logic` for this step, as the `Model` is designed to be observed by the `UI` component, so the `UI` will automatically update itself to reflect the changes in the sorted & filtered list of `Person` objects in the `Model`.
 * The command result is encapsulated as a `CommandResult` object which is returned back to `Logic`, who will return it to the higher level components (e.g. `MainWindow`, a UI component) that called it.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
