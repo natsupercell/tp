@@ -82,7 +82,7 @@ To ensure this guide is effective, we assume the target user:
   * `add -n John Doe -p 98765432 -e johnd@u.nus.edu -a John Street, Block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
 <div markdown="block" class="alert alert-info">
-**:information_source: Command confirmation:**<br>
+**ℹ️ Command confirmation:**<br>
   Certain commands like `delete` and `clear` will ask for confirmation. Input `y` to confirm or `n` to cancel.
 </div>
 
@@ -102,7 +102,7 @@ To ensure this guide is effective, we assume the target user:
 
 <div markdown="block" class="alert alert-info">
 
-**:information_source: Notes about the command format:**<br>
+**ℹ️ Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add -n NAME`, `NAME` is a parameter which can be used as `add -n John Doe`.
