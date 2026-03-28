@@ -80,11 +80,11 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `clear` and subsequently confirms the deletion..
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+<img src="images/LogicSequenceDiagram.png" width="574" />
 
-Each of the four main components (also shown in the diagram above),
+Each of the main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
 * implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
@@ -120,11 +120,11 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, using the `execute("delete 1")` API call and its subsequent confirmation `execute("y")` as an example to demonstrate the confirmation flow.
 
 ![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
 
 How the `Logic` component works:
@@ -134,6 +134,19 @@ How the `Logic` component works:
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+
+Here is another sequence diagram illustrating the interactions within the `Logic` component, with `execute("list reverse")` API call as another example.
+
+![Interactions Inside the Logic Component for the `list reverse` Command](images/ListSequenceDiagram.png)
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `ListCommandParser` and `ListCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</div>
+
+How the `Logic` component works (overlapping content are simplified):
+
+* Similar to the `delete 1` command above, `AddressBookParser` creates a `ListCommandParser` which parses the argument `reverse` and returns a `ListCommand` object.
+* This command object is executed by `LogicManager` which communicates with the `Model` to update the sorted & filtered list of `Person` objects in the `Model` to be in reverse order. Do note that there is no return value from the `Model` to the `Logic` for this step, as the `Model` is designed to be observed by the `UI` component, so the `UI` will automatically update itself to reflect the changes in the sorted & filtered list of `Person` objects in the `Model`.
+* The command result is encapsulated as a `CommandResult` object which is returned back to `Logic`, who will return it to the higher level components (e.g. `MainWindow`, a UI component) that called it.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
@@ -156,7 +169,7 @@ The `Model` component,
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -194,6 +207,8 @@ For `clear`, confirmation is always required before clearing the currently liste
 
 For `add`, confirmation is only required when the person being added already exists in the address book. Non-duplicate contacts are added immediately without any confirmation prompt.
 
+![Confirm Command Class Diagram](images/ConfirmCommandClassDiagram.png)
+
 This shared behavior is implemented using an interface `ConfirmCommand`. Concrete subclasses such as `ConfirmDeleteCommand`, `ConfirmClearCommand`, and `ConfirmAddCommand` inherit from their base classes, while implementing `ConfirmCommand` and providing command-specific validation and confirmation messages.
 
 #### Implementation
@@ -209,7 +224,7 @@ If the command requires confirmation, a corresponding `ConfirmCommand` subclass 
 
 These confirmation commands do not perform the final action immediately. Instead, they return a `CommandResult` indicating that the application is awaiting confirmation input.
 
-`LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms.
+`LogicManager` then enters a temporary confirmation state and stores the actual command that should be executed later if the user confirms. (The sequence diagram for this interaction is detailed in the [Logic Component](#logic-component) section above).
 
 After that:
 - if the user enters `y`, the stored command is executed
@@ -277,7 +292,7 @@ Step 3. The user executes `add -n David …​` to add a new person. The `add` c
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
 
 </div>
 
@@ -285,7 +300,7 @@ Step 4. The user now decides that adding the person was a mistake, and decides t
 
 ![UndoRedoState3](images/UndoRedoState3.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
 than attempting to perform the undo.
 
 </div>
@@ -294,7 +309,7 @@ The following sequence diagram shows how an undo operation goes through the `Log
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 
 </div>
 
@@ -304,7 +319,7 @@ Similarly, how an undo operation goes through the `Model` component is shown bel
 
 The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+<div markdown="span" class="alert alert-info">ℹ️ **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
 </div>
 
