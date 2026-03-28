@@ -80,11 +80,11 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1` and subsequently confirms the deletion.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `clear` and subsequently confirms the deletion..
 
-<img src="images/ArchitectureSequenceDiagram.png" width="574" />
+<img src="images/LogicSequenceDiagram.png" width="574" />
 
-Each of the four main components (also shown in the diagram above),
+Each of the main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
 * implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
@@ -134,6 +134,19 @@ How the `Logic` component works:
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+
+Here is another sequence diagram illustrating the interactions within the `Logic` component, with `execute("list reverse")` API call as another example.
+
+![Interactions Inside the Logic Component for the `list reverse` Command](images/ListSequenceDiagram.png)
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `ListCommandParser` and `ListCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</div>
+
+How the `Logic` component works (overlapping content are simplified):
+
+* Similar to the `delete 1` command above, `AddressBookParser` creates a `ListCommandParser` which parses the argument `reverse` and returns a `ListCommand` object.
+* This command object is executed by `LogicManager` which communicates with the `Model` to update the sorted & filtered list of `Person` objects in the `Model` to be in reverse order. Do note that there is no return value from the `Model` to the `Logic` for this step, as the `Model` is designed to be observed by the `UI` component, so the `UI` will automatically update itself to reflect the changes in the sorted & filtered list of `Person` objects in the `Model`.
+* The command result is encapsulated as a `CommandResult` object which is returned back to `Logic`, who will return it to the higher level components (e.g. `MainWindow`, a UI component) that called it.
 
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
